@@ -101,7 +101,36 @@ def main():
 
                 # Chat loop
                 while True:
-                    #do stuff
+                    messages = input("Enter message: ")  # Message prompt
+
+                    #Sending message with timestamp
+                    timestamp = datetime.now().strftime("") # FINISH the timestamp format
+                    send_data = {
+                        "NICK": nickname, "TIME": timestamp, "MESSAGE": message
+                    }
+                    send_message(sock, json.dumps(send_data)) # Send message to server
+
+                    print(f"{nickname}({timestamp}):{message}") # Print the nickname, timestamp, and message
+
+                    # Get and display messages from server
+                    received_data = get_message(sock) # Recieving data from the server
+                    if received_data:
+                        received_data = json.loads(received_data) # Load the data
+                        received_nick = received_data.get("NICK", "") # Sender's nickname
+                        received_time = received_data.get("TIME", "") # The timestamp
+                        received_message = received_data.get("MESSAGE", "") # Message content
+                        print(f"{received_nick}({received_time}):{received_message}") # Print the nickname, timestamp, and message
+
+        except KeyboardInterrupt:     
+            confirm = input("Are you sure you want to exit? (y/n)")
+            if confirm == 'y':
+                send_message(sock, json.dumps({"BYE": "Disconnecting..."}))
+                sock.close()
+                print("Connection closed")
+            else:
+                print("Okay! Keep chatting")
+    else:
+        print("Connection failed. Exiting.") # Connection failure
 
 if __name__ == "__main__":
     main()
