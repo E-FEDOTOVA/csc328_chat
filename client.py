@@ -42,7 +42,7 @@ def connect_to_server(host, port):
 #   message - message to be sent
 def send_message(sock, message):
     try:
-        sock.sendall(message.encode())  # Sending the encoded??? message through the socket
+        sock.sendall(message)  # Sending the encoded??? message through the socket
     except Exception as e:
         print("Failed to send message: {}".format(str(e)))  # Handling message sending errors
 
@@ -52,16 +52,26 @@ def send_message(sock, message):
 #   sock - connected socket object
 # Return Value:
 #   received message if successful, otherwise None
-def get_message(sock):
-    try:
-        data = sock.recv(1024)  # Receiving data from the socket
-        if data:
-            return data.decode()  # Returning the decoded received data
-        else:
-            return None
-    except Exception as e:
-        print("Failed to receive message: {}".format(str(e)))  # Handling message receiving errors
-        return None
+def get_message(sock):               
+    while True:
+            data = sock.recv(2)  # receive word packets in 2 byte increments
+            if not data:
+                break
+
+            str_len = int.from_bytes(data, "big")  # bytes to integers big-endian
+            data = sock.recv(str_len)
+            print(data.decode())  # decode word packets and print it
+        
+        
+
+#def really_read(s, n):
+#    bytes = b''
+#    while len(bytes) != n:
+#        curr_read = s.recv(n - len(bytes))
+#        bytes += curr_read
+#        if len(curr_read) == 0: break
+#    return bytes
+
 
 # Function name: main
 # Description: main function of the client program
