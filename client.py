@@ -10,11 +10,11 @@
 # to a chat server, and after a nickname is chosen, sends, 
 # and gets messages
 
-import socket  
-import sys  
+import socket
+import sys
 import json
 from datetime import datetime 
-#import library  
+import library   
 
 # Function name: connect_to_server
 # Description: connect to a remote server using a TCP socket
@@ -87,61 +87,56 @@ def main():
 
     if sock:
         try:
-            # Connection established
             print("Connected to chat server")
 
             # Receive HELLO from server
-            hello_msg = get_message(sock)  # Receiving initial message from server
-            if hello_msg.strip() == "HELLO":  # Checking if the received message is "HELLO"
-                nickname = input("Enter your nickname: ")  # Prompting user for a nickname
-                send_message(sock, json.dumps({"NICK": nickname}))  # Sending nickname to the server
+            hello_msg = get_message(sock)
+            if hello_msg.strip() == "HELLO":
+                nickname = input("Enter your nickname: ")
+                send_message(sock, library.make_word_packet("NICK", nickname))
 
-                # Wait for server response
                 while True:
-                    response = get_message(sock)  # Receiving response from the server
+                    response = get_message(sock)
                     if response:
-                        response_data = json.loads(response)  # Loading received JSON data
-                        if "RETRY" in response_data:  # Checking if the server requests a new nickname
+                        response_data = json.loads(response)
+                        if "RETRY" in response_data:
                             print("Nickname already taken. Choose another.")
-                            nickname = input("Enter your nickname: ")  # Prompting for a new nickname
-                            send_message(sock, json.dumps({"NICK": nickname}))  # Sending new nickname
-                        elif "READY" in response_data:  # Checking if the nickname is accepted
+                            nickname = input("Enter your nickname: ")
+                            send_message(sock, library.make_word_packet("NICK", nickname))
+                        elif "READY" in response_data:
                             print("Nickname accepted. Start chatting.")
-                            break  # Breaking the loop when nickname is accepted
+                            break
 
-                # Chat loop
                 while True:
-                    messages = input("Enter message: ")  # Message prompt
+                    message = input("Enter message: ")
 
-                    #Sending message with timestamp
-                    timestamp = datetime.now().strftime("") # FINISH the timestamp format
+                    timestamp = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
                     send_data = {
                         "NICK": nickname, "TIME": timestamp, "MESSAGE": message
                     }
-                    send_message(sock, json.dumps(send_data)) # Send message to server
+                    send_message(sock, library.make_word_packet("MSG", json.dumps(send_data)))
 
-                    print(f"{nickname}({timestamp}):{message}") # Print the nickname, timestamp, and message
+                    print(f"{nickname}({timestamp}): {message}")
 
-                    # Get and display messages from server
-                    received_data = get_message(sock) # Recieving data from the server
+                    received_data = get_message(sock)
                     if received_data:
-                        received_data = json.loads(received_data) # Load the data
-                        received_nick = received_data.get("NICK", "") # Sender's nickname
-                        received_time = received_data.get("TIME", "") # The timestamp
-                        received_message = received_data.get("MESSAGE", "") # Message content
-                        print(f"{received_nick}({received_time}):{received_message}") # Print the nickname, timestamp, and message
+                        received_data = json.loads(received_data)
+                        received_nick = received_data.get("NICK", "")
+                        received_time = received_data.get("TIME", "")
+                        received_message = received_data.get("MESSAGE", "")
+                        print(f"{received_nick}({received_time}): {received_message}")
 
-        except KeyboardInterrupt:     
+        except KeyboardInterrupt:
             confirm = input("Are you sure you want to exit? (y/n)")
-            if confirm == 'y':
-                send_message(sock, json.dumps({"BYE": "Disconnecting..."}))
+            if confirm.lower() == 'y':
+                send_message(sock, library.make_word_packet("BYE", "Disconnecting..."))
+                time.sleep(1)  #delay before closing
                 sock.close()
                 print("Connection closed")
             else:
                 print("Okay! Keep chatting")
     else:
-        print("Connection failed. Exiting.") # Connection failure
+        print("Connection failed. Exiting.")
 
 if __name__ == "__main__":
     main()
-                        
