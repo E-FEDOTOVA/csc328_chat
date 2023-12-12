@@ -13,6 +13,7 @@
 import socket
 import sys
 import json
+import time
 from datetime import datetime 
 import library   
 
@@ -61,7 +62,7 @@ def get_message(sock):
             str_len = int.from_bytes(data, "big")  # bytes to integers big-endian
             data = sock.recv(str_len)
             print(data.decode())  # decode word packets and print it
-        
+            return data.decode()  # return received message
         
 
 #def really_read(s, n):
@@ -78,7 +79,7 @@ def get_message(sock):
 def main():
     if len(sys.argv) != 3:  # Checking if the number of command-line arguments is correct
         print("Wrong number of command-line arguments, provide <host> <port>")
-        return
+        return 
 
     host = sys.argv[1]  # Retrieving host from command-line arguments
     port = int(sys.argv[2])  # Retrieving port from command-line arguments
@@ -92,6 +93,7 @@ def main():
             # Receive HELLO from server
             hello_msg = get_message(sock)
             if hello_msg.strip() == "HELLO":
+                nick_word = get_message(sock) # receive the NICK word from server
                 nickname = input("Enter your nickname: ")
                 send_message(sock, library.make_word_packet("NICK", nickname))
 
