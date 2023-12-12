@@ -14,6 +14,7 @@ import socket
 import sys
 import json
 from datetime import datetime
+from library import make_word_packet, send_message, read_message
 
 # Function name: connect_to_server
 # Description: connect to a remote server using a TCP socket
@@ -88,8 +89,13 @@ def main():
                             break
                         elif response.strip() == "RETRY":
                             print("Nickname already taken. Choose another.")
-                            nickname = input("Enter your nickname: ")
+                            nickname = input("Enter your nickname: ") 
                             send_name(sock, len(nickname).to_bytes(2, 'big') + nickname.encode())
+                
+                while True:
+                    message = input(f"{nickname} [You]: ")
+                    send_message(sock, nickname, message)
+
         except KeyboardInterrupt:
             print("Exiting...")
             sock.close()
