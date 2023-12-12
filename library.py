@@ -15,7 +15,6 @@ import sys
 #             string message - message to be sent
 # Return Value: None
 def send_message(sending_socket, nickname, message):
-
     packet = make_word_packet(nickname, message)
     sending_socket.sendall(packet)
 
@@ -24,7 +23,6 @@ def send_message(sending_socket, nickname, message):
 #             bytes packet - word packet in bytes
 # Return Value: dict_packet - word packet as a dictionary
 def read_message(receiving_socket, packet):
-
     json_packet = packet.decode()
     dict_packet = json.loads(data)
     return dict_packet
@@ -40,6 +38,7 @@ def read_message(receiving_socket, packet):
 #             string message - message to be sent
 # Return Value: json_packet - json word packet in bytes with nickname, message, and length of message
 def make_word_packet(nickname, message):
-    packet = {"timestamp": datetime.now(), "nickname" : nickname, "message" : message}
-    json_packet = json.dump(packet)
+    timestamp = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    packet = {"timestamp": timestamp, "nickname" : nickname, "message" : message}
+    json_packet = json.dumps(packet)
     return json_packet.encode()
