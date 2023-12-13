@@ -5,6 +5,8 @@ import socket
 import random
 import signal
 import library
+import os
+import time
 
 def really_read(s, n):
     bytes = b''
@@ -28,9 +30,28 @@ def really_read(s, n):
 #   length = len(word_pack).to_bytes(2, byteorder='big')
 #   return(length+word_pack)
 
+def send_chats(conn, nickname, all_clients):
+    while True:
+        data = conn.recv(2)
+        if data:
+            for i in all_clients:
+                if i != nickname:
+                    print('good')          
 
+def receive_chats(conn, nickname, all_nicks, all_socks):
+    while True:
+        chat_message = library.read_message(conn)
+        if chat_message:
+            j=0
+            for i in all_nicks:
+                if i != nickname:
+                    library.send_message(all_socks[j], nickname, chat_message) 
+                    j+=1
+                else:     
+                    j+=1
 def main():
-    all_clients = []
+    all_nicks = []
+    all_socks = []
     if len(sys.argv) != 2:
         exit("Usage: server <port>")
     try:
@@ -42,30 +63,33 @@ def main():
                 with conn:
                     #Send hello to connecting client
                     conn.sendall(len("HELLO").to_bytes(2, 'big') + "HELLO".encode()) 
-                    # conn.sendall(len("Enter a nickname").to_bytes(2, 'big') + x.encode())
-                    # word_length = int.from_bytes(really_read(s, 2), 'big')
-                    #   if word_length == 0: break
-                    #nickname = really_read(s, word_length)                    
-                    # for i in all_clients:
-                    #   if i != nickname:
 
                     unique = 0                
+                    conn.sendall(len("NICK").to_bytes(2, 'big') + "NICK".encode())
                     while True:                        
-                        conn.sendall(len("NICK").to_bytes(2, 'big') + "NICK".encode())
                         word_length = int.from_bytes(really_read(conn, 2), 'big')
                         nickname = really_read(conn, word_length).decode()
-                        for i in all_clients:
+                        for i in all_nicks:
                             if i != nickname: 
                                 unique += 1                                     
-                        if unique == len(all_clients):
+                        if unique == len(all_nicks):
                             conn.sendall(len("READY").to_bytes(2, 'big') + "READY".encode())
                             break 
                         conn.sendall(len("RETRY").to_bytes(2, 'big') + "RETRY".encode())
-
-                    all_clients.append(nickname)
-              
-
-                    
+                    unique = 0
+                    all_socks.append(conn)
+                    all_nicks.append(nickname)
+               
+                    check = os.fork() 
+                    if check == 0: 
+                        receive_chats(conn, nickname, all_nicks, all_socks)
+                        #os.wait()
+                        #all_nicks.remove(nickname)
+                        #all_socks.remove(conn)
+                    #elif os.fork() > 0:
+                        #receive_chats(conn, nickname, all_clients)
+                        #all_clients.remove((nickname, conn))
+ 
 
  
     except OSError as e:
