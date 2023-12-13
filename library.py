@@ -38,7 +38,7 @@ def read_message(receiving_socket):
     packet_length = int.from_bytes(really_read(receiving_socket, 2), 'big')
     packet = really_read(receiving_socket, packet_length)
     json_packet = packet.decode()
-    dict_packet = json.loads(data)
+    dict_packet = json.loads(json_packet)
     return dict_packet
 
 # Description: Makes a word packet in a JSON format
