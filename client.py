@@ -78,20 +78,20 @@ def main():
 
             hello_msg = get_message(sock)
             if hello_msg.strip() == "HELLO":
-                nickname = input("Enter your nickname: ")
-                send_name(sock, len(nickname).to_bytes(2, 'big') + nickname.encode())
+                # Wait for server to send NICK
+                nick_msg = get_message(sock)
+                if nick_msg.strip() == "NICK":
+                    while True:
+                        nickname = input("Enter your nickname: ")
+                        send_name(sock, len(nickname).to_bytes(2, 'big') + nickname.encode())
 
-                while True:
-                    response = get_message(sock)
-                    if response:
+                        response = get_message(sock)
                         if response.strip() == "READY":
                             print("Nickname accepted. Start chatting.")
                             break
                         elif response.strip() == "RETRY":
                             print("Nickname already taken. Choose another.")
-                            nickname = input("Enter your nickname: ") 
-                            send_name(sock, len(nickname).to_bytes(2, 'big') + nickname.encode())
-                
+
                 while True:
                     message = input(f"{nickname} [You]: ")
                     send_message(sock, nickname, message)
