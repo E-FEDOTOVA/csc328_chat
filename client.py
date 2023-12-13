@@ -14,7 +14,7 @@ import socket
 import sys
 import json
 from datetime import datetime
-from library import make_word_packet, send_message, read_message
+import library
 
 # Function name: connect_to_server
 # Description: connect to a remote server using a TCP socket
@@ -83,21 +83,27 @@ def main():
                 if nick_msg.strip() == "NICK":
                     while True:
                         nickname = input("Enter your nickname: ")
-                        send_name(sock, len(nickname).to_bytes(2, 'big') + nickname.encode())
+                        if nickname.strip():  #
+                            send_name(sock, len(nickname).to_bytes(2, 'big') + nickname.encode())
 
-                        response = get_message(sock)
-                        if response.strip() == "READY":
-                            print("Nickname accepted. Start chatting.")
-                            break
-                        elif response.strip() == "RETRY":
-                            print("Nickname already taken. Choose another.")
+                            response = get_message(sock)
+                            if response.strip() == "READY":
+                                print("Nickname accepted. Start chatting.")
+                                break
+                            elif response.strip() == "RETRY":
+                                print("Nickname already taken. Choose another.")
+                        else:
+                            print("Nickname cannot be empty. Please enter a valid nickname.")
 
                 while True:
                     message = input(f"{nickname} [You]: ")
-                    send_message(sock, nickname, message)
+                    if message.strip():
+                        library.send_message(sock, nickname, message)
+                    else:
+                        print("Message cannot be empty. Please enter a valid message.")
 
         except KeyboardInterrupt:
-            print("Exiting...")
+            library.send_message(sock, nickname, "BYE")
             sock.close()
     else:
         print("Connection failed. Exiting.")
