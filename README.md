@@ -24,7 +24,7 @@ Library Functions: library.py
 # RESPONSIBILITY MATRIX 
 | **Group Member** | Server | Client | Library | README |
 |------------------|--------|--------|---------|--------|
-| Zachary          | R       |        |   C       |   P (Application Protocol)     |
+| Zachary          | R       |        |   C       |       |
 | Lauren           |     C (major contribution)    |     C    |     R    |   P (Application Protocol)     |
 | Kate             |        |    R    |         |    R    |
 
