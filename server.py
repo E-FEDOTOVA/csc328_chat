@@ -43,7 +43,7 @@ def receive_chats(conn, nickname, all_nicks, all_socks):
                 break
                 # child process stuff?
             else:
-                with open('log.txt', 'r+') as f:
+                with open('log.txt', 'a+') as f:
                     messages = f.read().encode()
                     length = len(messages).to_bytes(2, 'big')
                 conn.sendall(length + messages)
