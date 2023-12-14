@@ -122,9 +122,9 @@ def main():
                 if pid == 0:  # child process
                     #input(" ")
                     print(" ")
-                    #read_messages(sock, nickname)  # Start listening for incoming messages
+                    #read_messages(sock, nickname)  # incoming messages
                 else:
-                    send_messages(sock, nickname)  # Allow the parent process to send messages
+                    send_messages(sock, nickname)  # send messages
 
         except KeyboardInterrupt:
             library.send_message(sock, nickname, "BYE")
