@@ -104,14 +104,15 @@ more here
 
 # APPLICATION PROTOCOL 
 1. Server starts
-2. Client connects
+2. Client connects, sends "HELLO" to connecting client, then sends "NICK" to client to receive a nickname
+3. Client sends nickname to server, sending "READY" upon approval, or "RETRY" until server accepts nickname
    * Chooses a unique nickname
-3. After client joins, client receives messages from other clients from before they joined
-4. Client sends their own message
+4. After client joins, client receives messages from other clients from before they joined
+5. Client sends their own message
    * Server sends log file contents to client
    * Server logs new message in file
    * Client gets messages from other clients that were sent to the server since their last message  
-5. Client or server hits ctrl+c to exit
+6. Client or server hits ctrl+c to exit
    * Client sends "BYE" to server on exit
    * Server closes in 5 seconds after keys are hit
 
