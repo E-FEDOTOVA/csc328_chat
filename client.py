@@ -13,6 +13,7 @@
 import socket
 import sys
 import json
+import os
 from datetime import datetime
 import library
 
@@ -96,12 +97,22 @@ def main():
                         else:
                             print("Nickname cannot be empty. Please enter a valid nickname.")
 
-                while True:
-                    message = input(f"{nickname} [You]: ")
-                    if message.strip():
-                        library.send_message(sock, nickname, message)
-                    else:
-                        print("Message cannot be empty. Please enter a valid message.")
+                pid = os.fork()
+                if pid == 0:  # child process
+                    # READ MESSAGES
+                    while True:
+                        other_client_message = library.read_message(sock)
+                        if not other_client_message:
+                            break
+                        print("\x1b[32m" + other_client_message['nickname'] + "\x1b[0m: " + other_client_message['message'])
+                else:
+                    # SEND MESSAGES
+                    while True:
+                        message = input(f"{nickname} [You]: ")
+                        if message.strip():
+                            library.send_message(sock, nickname, message)
+                        else:
+                            print("Message cannot be empty. Please enter a valid message.")
 
         except KeyboardInterrupt:
             library.send_message(sock, nickname, "BYE")
