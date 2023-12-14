@@ -13,15 +13,6 @@ import library
 import os
 import time
 
-'''
-def really_read(s, n):
-    bytes = b''
-    while len(bytes) != n:
-        curr_read = s.recv(n - len(bytes))
-        bytes += curr_read
-        if len(curr_read) == 0: break
-    return bytes
-'''
 all_nicks = []
 all_socks = []
 
@@ -60,16 +51,6 @@ def receive_chats(conn, nickname, all_nicks, all_socks):
                 with open('log.txt', 'a') as f:
                     print(str(chat_message) + "\n", file=f)
 
-                '''
-                for sock in all_socks:
-                    if sock != conn and sock.fileno() != -1:
-                        library.send_message(sock, nickname, chat_message)
-                '''
-                '''
-                for j, nick in enumerate(all_nicks):
-                    if nick != nickname and all_socks[j].fileno() != 0:
-                        library.send_message(all_socks[j], nickname, chat_message)
-                '''
 # Description: Main function. Creates processes for and interacts with client
 # Parameters: None
 # Return Value: 0 if successful, -1 if error occurred
@@ -111,19 +92,6 @@ def main():
                         exit()  # exit child process
                     elif pid > 0:
                         os.wait()
-                    '''
-                    check = os.fork()
-                    if check == 0:
-                        s.close()
-                        receive_chats(conn, nickname, all_nicks, all_socks)
-                        exit()
-                    '''
-                        #os.wait()
-                        #all_nicks.remove(nickname)
-                        #all_socks.remove(conn)
-                    #elif os.fork() > 0:
-                        #receive_chats(conn, nickname, all_clients)
-                        #all_clients.remove((nickname, conn))
 
     except OSError as e:
         exit(e)
