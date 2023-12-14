@@ -118,7 +118,8 @@ more here
    * Server closes in 5 seconds after keys are hit
 
 # ASSUMPTIONS 
-– clearly list and describe any assumptions made about running the application or how the application works
+* Clients will be able to connect and send messages to server
+* Second client cannot choose nickname before first client chooses their nickname
 
 # Discussion on your development process
  including any decisions and/or major problems you encountered and your solution for each
@@ -134,4 +135,5 @@ Used JSON packets to handle packets being sent over the network, by storing the 
 Each process used a receive_chats function that handles communication between the client and the server. Encountered problems sending the information to all clients, except the originating client, who could receive the message.
 
 # STATUS 
-– current status of applications in terms of specifications, and any known issues with the application
+* Clients are still unable to read other client's messages from server and get the other client's messages.
+* Second client cannot choose nickname before first client chooses their nickname
