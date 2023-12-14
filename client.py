@@ -65,7 +65,12 @@ def get_message(sock):
         data = sock.recv(str_len)
         return data.decode()
         
-# CHILD PROCESS - READ MESSAGES
+#Function name: read_messages
+#Description: listens to incoming messages from the connected socket in a child process.
+#    prints received messages from other clients and prompts for sending new messages.
+#Parameters:
+#    sock - connected socket object
+#    nickname - the nickname of the current user
 def read_messages(sock, nickname):
     while True:
         other_client_message = library.read_message(sock)
@@ -75,7 +80,11 @@ def read_messages(sock, nickname):
             print("\x1b[32m" + other_client_message['nickname'] + "\x1b[0m: " + other_client_message['message'])
             send_messages(sock, nickname)
 
-# PARENT PROCESS - SEND MESSAGES
+#Function name: send_messages
+#Description: takes user input for messages and sends them to the server through the socket.
+#Parameters:
+#    sock - connected socket object
+#    nickname - the nickname of the current user
 def send_messages(sock, nickname):
     while True:
         message = input("\033[36m" + f"{nickname} [You]: " + "\033[0m")
