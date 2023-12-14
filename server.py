@@ -46,6 +46,7 @@ def receive_chats(conn, nickname, all_nicks, all_socks):
 
             if chat_message['message'] == "BYE":
                 conn.close()
+                all_nicks.remove(nickname)
                 # child process stuff?
             else:
                 #print(f"Received from {chat_message[nickname]}: {chat_message[message]}")
