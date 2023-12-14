@@ -75,10 +75,10 @@ def get_message(sock):
 def read_messages(sock, nickname):
     #while True:
     other_client_message = get_message(sock);
-    if other_client_message.strip():
-        print(other_client_message)
+    if other_client_message is None:
+        pass
     else:
-        print("empty")
+        print(other_client_message)
     #other_client_message = library.read_message(sock)
     #if not other_client_message:
     #    send_messages(sock, nickname)
@@ -133,13 +133,13 @@ def main():
                         else:
                             print("Nickname cannot be empty. Please enter a valid nickname.")
 
-                pid = os.fork()
-                if pid == 0:  # child process
-                    #input(" ")
-                    print(" ")
-                    read_messages(sock, nickname)  # incoming messages
-                else:
-                    send_messages(sock, nickname)  # send messages
+                    pid = os.fork()
+                    if pid == 0:  # child process
+                        #input(" ")
+                        print(" ")
+                        read_messages(sock, nickname)  # incoming messages
+                    else:
+                        send_messages(sock, nickname)  # send messages
 
         except KeyboardInterrupt:
             library.send_message(sock, nickname, "BYE")
