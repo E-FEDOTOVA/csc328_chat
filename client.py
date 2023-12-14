@@ -39,14 +39,15 @@ def connect_to_server(host, port):
 # Description: sends a nickname through the socket
 # Parameters:
 #   sock - connected socket object
-#   nickname - nickname to be sent
+#   name - nickname to be sent
 def send_name(sock, name):
     try:
-        sock.sendall(name)
+        nickname_length = len(name).to_bytes(2, 'big')
+        sock.sendall(nickname_length + name)
     except Exception as e:
         print("Failed to send nickname: {}".format(str(e)))
 
-# Function name: get_message
+# Function name: get_message 
 # Description: receives a message from the socket
 # Parameters:
 #   sock - connected socket object
