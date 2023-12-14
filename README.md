@@ -24,8 +24,8 @@ Library Functions: library.py
 # RESPONSIBILITY MATRIX 
 | **Group Member** | Server | Client | Library | README |
 |------------------|--------|--------|---------|--------|
-| Zachary          | R       |        |   C       |       |
-| Lauren           |     C (major contribution)    |     C    |     R    |   P (Application Protocol)     |
+| Zachary          | R       |        |   C       |       | C
+| Lauren           |     C (major contribution)    |     C    |     R    |   R (Application Protocol)     |
 | Kate             |        |    R    |         |    R    |
 
 > R - Primary responsible
