@@ -25,7 +25,7 @@ Library Functions: library.py
 | **Group Member** | Server | Client | Library | README |
 |------------------|--------|--------|---------|--------|
 | Zachary          | R       |        |   C       |   P (Application Protocol)     |
-| Lauren           |     C    |     C    |     R    |        |
+| Lauren           |     C    |     C    |     R    |   P (Application Protocol)     |
 | Kate             |        |    R    |         |    R    |
 
 > R - Primary responsible
