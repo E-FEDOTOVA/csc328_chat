@@ -35,7 +35,10 @@ all_nicks = []
 all_socks = []
 
 # Remove log file if it exists
-os.remove("log.txt")
+try:
+    os.remove("log.txt")
+except Exception as e:
+    pass
 
 # Description: Receives chats from a client and sends it to the other clients
 # Parameters: socket conn - originating client connection
