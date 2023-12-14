@@ -36,23 +36,23 @@ Library Functions: library.py
 1.  **Initialize and Listen to socket**
     
     -   Setting up the server socket to listen for incoming connections.
-    -   Time Taken: 
+    -   Time Taken: 5 minutes
 2.  **Handling Connection Requests**
     
     -   Managing incoming connection requests from clients and sending initial messages.
-    -   Time Taken: 
+    -   Time Taken: 1 hour
 3.  **Nickname Validation**
     
     -   Validate unique nicknames for clients.
-    -   Time Taken: 
+    -   Time Taken: 2 hours
 4.  **Sending and Receiving Messages**
     
     -   Send and receive messages to clients.
-    -   Time Taken: 
+    -   Time Taken: 15 hours
 5.  **Forking Child Processes**
     
     -   Implementing child processes to manage message reception for multiple clients simultaneously.
-    -   Time Taken:
+    -   Time Taken: Zach - 3 hours > Lauren - 
 ### Notes on server:
 more here
 
