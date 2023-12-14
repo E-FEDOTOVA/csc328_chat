@@ -26,7 +26,7 @@ Library Functions: library.py
 |------------------|--------|--------|---------|--------|
 | Zachary          | R       |        |   C       |       | C
 | Lauren           |     C (major contribution)    |     C    |     R    |   R (Application Protocol)     |
-| Kate             |        |    R    |         |    R    |
+| Kate             |   C     |    R    |         |    R    |
 
 > R - Primary responsible
 > C - Consulted
