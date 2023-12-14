@@ -16,7 +16,7 @@
     python3 client.py <host> <port number>
 
 # MANIFEST
-Server: server.py
+Server: server.py 
 Client: client.py
 Library Functions: library.py
 
