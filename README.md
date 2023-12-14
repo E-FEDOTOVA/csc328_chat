@@ -60,19 +60,19 @@ more here
 1.  **send_message Function**
     
     -   Create a function to enable a socket to send a word packet containing a message.
-    -   Time Taken: 
+    -   Time Taken: 15 minutes
 2.  **really_read Function**
     
     -   Function to read all bytes of a word packet.
-    -   Time Taken: 
+    -   Time Taken: 5 minutes
 3.  **read_message Function**
 
     -   Function to allow a socket to read a word packet containing a message.
-    -   Time Taken: 
+    -   Time Taken: 15 minutes
 5.  **make_word_packet Function**
     
     -   Function to create a word packet in a JSON format.
-    -   Time Taken: 
+    -   Time Taken: 15 minutes
 
 ### Notes on library:
 more here
@@ -89,11 +89,11 @@ more here
 3.  **Receiving Messages**
     
     -   Functionality to receive messages from the connected socket.
-    -   Time Taken: - 
+    -   Time Taken: /still in progress as of 12/14 8:30AM/
 4.  **Reading Incoming Messages Process**
     
     -   Child process to read incoming messages.
-    -   Time Taken: 
+    -   Time Taken:  /still in progress as of 12/14 8:30AM/
 5.  **Sending Messages Process**
     
     -   Parent process to send messages through the socket.
