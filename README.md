@@ -109,9 +109,10 @@ more here
    * Chooses a unique nickname
 4. After client joins, client receives messages from other clients from before they joined
 5. Client sends their own message
-   * Server sends log file contents to client
-   * Server logs new message in file
-   * Client gets messages from other clients that were sent to the server since their last message  
+   * Server sends log file contents in JSON format to client
+   * JSON word packets contain timestamp, nickname, and message
+   * Server logs new message in JSON format in file
+   * Client parse JSON data to getsmessages from other clients that were sent to the server since their last message  
 6. Client or server hits ctrl+c to exit
    * Client sends "BYE" to server on exit
    * Server closes in 5 seconds after keys are hit
