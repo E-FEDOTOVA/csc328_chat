@@ -9,6 +9,9 @@ import library
 import os
 import time
 
+all_nicks = []
+all_socks = []
+
 def really_read(s, n):
     bytes = b''
     while len(bytes) != n:
@@ -44,7 +47,7 @@ def receive_chats(conn, nickname, all_nicks, all_socks):
             chat_message = library.read_message(conn)
             if chat_message:
                 print(f"Received from {chat_message['nickname']}: {chat_message['message']}")
-
+                #print(conn.fileno())
             if chat_message['message'] == "BYE":
                 conn.close()
                 all_nicks.remove(nickname)
@@ -61,16 +64,16 @@ def receive_chats(conn, nickname, all_nicks, all_socks):
         all_socks.remove(conn)
 
 def main():
-    all_nicks = []
-    all_socks = []
     if len(sys.argv) != 2:
         exit("Usage: server <port>")
     try:
         with socket.socket() as s:
             s.bind(('', int(sys.argv[1])))
-            s.listen(1)  
+            s.listen(1)
+            #print(s.fileno())
             while True:
                 conn, _ = s.accept()
+                #print(conn.fileno())
                 with conn:
                     conn.sendall(len("HELLO").to_bytes(2, 'big') + "HELLO".encode()) 
                     conn.sendall(len("NICK").to_bytes(2, 'big') + "NICK".encode())
@@ -90,6 +93,7 @@ def main():
 
                     pid = os.fork()
                     if pid == 0:  # child process
+                        library.send_message(conn, "another_person", "hello!")
                         receive_chats(conn, nickname, all_nicks, all_socks)
                         exit()  # exit child process 
 
