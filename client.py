@@ -16,6 +16,7 @@ import json
 import os
 from datetime import datetime
 import library
+import time
 
 # Function name: connect_to_server
 # Description: connect to a remote server using a TCP socket
@@ -63,6 +64,26 @@ def get_message(sock):
         str_len = int.from_bytes(data, "big")
         data = sock.recv(str_len)
         return data.decode()
+        
+# CHILD PROCESS - READ MESSAGES
+def read_messages(sock, nickname):
+    while True:
+        other_client_message = library.read_message(sock)
+        if not other_client_message:
+            send_messages(sock, nickname)
+        else:
+            print("\x1b[32m" + other_client_message['nickname'] + "\x1b[0m: " + other_client_message['message'])
+            send_messages(sock, nickname)
+
+# PARENT PROCESS - SEND MESSAGES
+def send_messages(sock, nickname):
+    while True:
+        message = input("\033[36m" + f"{nickname} [You]: " + "\033[0m")
+        if message.strip():
+            library.send_message(sock, nickname, message)
+        else:
+            print("Message cannot be empty. Please enter a valid message.")
+
 
 def main():
     if len(sys.argv) != 3:
@@ -99,20 +120,10 @@ def main():
 
                 pid = os.fork()
                 if pid == 0:  # child process
-                    # READ MESSAGES
-                    while True:
-                        other_client_message = library.read_message(sock)
-                        if not other_client_message:
-                            break
-                        print("\x1b[32m" + other_client_message['nickname'] + "\x1b[0m: " + other_client_message['message'])
+                    input(" ")
+                    read_messages(sock, nickname)  # Start listening for incoming messages
                 else:
-                    # SEND MESSAGES
-                    while True:
-                        message = input(f"{nickname} [You]: ")
-                        if message.strip():
-                            library.send_message(sock, nickname, message)
-                        else:
-                            print("Message cannot be empty. Please enter a valid message.")
+                    send_messages(sock, nickname)  # Allow the parent process to send messages
 
         except KeyboardInterrupt:
             library.send_message(sock, nickname, "BYE")
