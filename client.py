@@ -120,8 +120,8 @@ def main():
 
                 pid = os.fork()
                 if pid == 0:  # child process
-                    input(" ")
-                    read_messages(sock, nickname)  # Start listening for incoming messages
+                    print(" ")
+                    #read_messages(sock, nickname)  # Start listening for incoming messages
                 else:
                     send_messages(sock, nickname)  # Allow the parent process to send messages
 
