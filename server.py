@@ -9,6 +9,12 @@ import library
 import os
 import time
 
+#Function name: really_read
+# Description: Reads all bytes of a word packet (taken from Dr. Schwesinger)
+# Parameters: s - socket to read from
+#             n - number of bytes to read
+# Return Value: bytes - bytes read
+
 def really_read(s, n):
     bytes = b''
     while len(bytes) != n:
@@ -17,26 +23,13 @@ def really_read(s, n):
         if len(curr_read) == 0: break
     return bytes
 
-#createWordPacket(word_list):
-    '''
-    Function name: createWordPacket
-    Description: This function will receive a list of words and decide a random
-                    word from the list and create a word packet 
-    Parameters: string word_list -- a list of random words
-    Return: A word packet that uses a random word from the given list
-    '''
-
-#   rand_index = random.randint(0, (len(word_list)-1))
-#   word_pack = word_list[rand_index].encode()
-#   length = len(word_pack).to_bytes(2, byteorder='big')
-#   return(length+word_pack)
-
-def send_chats(conn, nickname, all_clients):
-        data = conn.recv(2)
-        if data:
-            for i in all_clients:
-                if i != nickname:
-                    print('good')
+#Function name: receive_chats
+#Description: This function will receive all neccessay component of communication in this server
+#              to messages between the client and server.
+#Parameters: conn -- the client who will be sending chats to the server
+#            nickname -- the unique nickname that each message will be corresponded to. 
+#            all_nicks -- list of all nicknames that are connected to the server
+#            all_socks -- list of all connections from clients 
 
 def receive_chats(conn, nickname, all_nicks, all_socks):
         try:
