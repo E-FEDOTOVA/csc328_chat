@@ -119,8 +119,7 @@ more here
 
 # ASSUMPTIONS 
 * Clients will be able to connect and send messages to server
-* Second client cannot choose nickname or send messages until first client disconnects
-* Client 
+* Second client cannot choose nickname or send messages until first client disconnects 
 
 # Discussion on your development process
  including any decisions and/or major problems you encountered and your solution for each
