@@ -52,7 +52,7 @@ Library Functions: library.py
 5.  **Forking Child Processes**
     
     -   Implementing child processes to manage message reception for multiple clients simultaneously.
-    -   Time Taken: Zach - 3 hours > Lauren - 
+    -   Time Taken: Zach - 3 hours, Lauren - 10 minutes
 ### Notes on server:
 more here
 
@@ -110,6 +110,16 @@ more here
 
 # Discussion on your development process
  including any decisions and/or major problems you encountered and your solution for each
+
+Decisions:
+
+Handled nickname validation through the server and can validate nicknames that have not been used before. Encountered problems when a user leaves and rejoins; the user will not be able to reuse their former nickname due to trouble handling memory inside processes. 
+
+Used processes to handle incoming clients. Encountered problem of handling concurrent users and shared memory for all members, so all clients could talk to each other. 
+
+Used JSON packets to handle packets being sent over the network, by storing the nickname, timestamp, and message. Worked as planned and no problems were encountered when handling the packets.
+
+Each process used a receive_chats function that handles communication between the client and the server. Encountered problems sending the information to all clients, except the originating client, who could receive the message.
 
 # STATUS 
 – current status of applications in terms of specifications, and any known issues with the application
