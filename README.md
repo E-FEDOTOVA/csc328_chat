@@ -103,7 +103,17 @@ more here
   more here
 
 # APPLICATION PROTOCOL 
-
+1. Server starts
+2. Client connects
+   * Chooses a unique nickname
+3. After client joins, client receives messages from other clients from before they joined
+4. Client sends their own message
+   * Server sends log file contents to client
+   * Server logs new message in file
+   * Client gets messages from other clients that were sent to the server since their last message  
+5. Client or server hits ctrl+c to exit
+   * Client sends "BYE" to server on exit
+   * Server closes in 5 seconds after keys are hit
 
 # ASSUMPTIONS 
 – clearly list and describe any assumptions made about running the application or how the application works
