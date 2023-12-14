@@ -17,6 +17,7 @@ import os
 from datetime import datetime
 import library
 import time
+import logging
 
 # Function name: connect_to_server
 # Description: connect to a remote server using a TCP socket
@@ -72,13 +73,18 @@ def get_message(sock):
 #    sock - connected socket object
 #    nickname - the nickname of the current user
 def read_messages(sock, nickname):
-    while True:
-        other_client_message = library.read_message(sock)
-        if not other_client_message:
-            send_messages(sock, nickname)
-        else:
-            print("\x1b[32m" + other_client_message['nickname'] + "\x1b[0m: " + other_client_message['message'])
-            send_messages(sock, nickname)
+    #while True:
+    other_client_message = get_message(sock);
+    if other_client_message.strip():
+        print(other_client_message)
+    else:
+        print("empty")
+    #other_client_message = library.read_message(sock)
+    #if not other_client_message:
+    #    send_messages(sock, nickname)
+    #else:
+    #    print("\x1b[32m" + other_client_message['nickname'] + "\x1b[0m: " + other_client_message['message'])
+    #    send_messages(sock, nickname)
 
 #Function name: send_messages
 #Description: takes user input for messages and sends them to the server through the socket.
@@ -131,7 +137,7 @@ def main():
                 if pid == 0:  # child process
                     #input(" ")
                     print(" ")
-                    #read_messages(sock, nickname)  # incoming messages
+                    read_messages(sock, nickname)  # incoming messages
                 else:
                     send_messages(sock, nickname)  # send messages
 
