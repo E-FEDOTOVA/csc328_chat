@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 
+import json
 import sys
 import socket
 import random
@@ -31,24 +32,34 @@ def really_read(s, n):
 #   return(length+word_pack)
 
 def send_chats(conn, nickname, all_clients):
-    while True:
         data = conn.recv(2)
         if data:
             for i in all_clients:
                 if i != nickname:
-                    print('good')          
+                    print('good')
 
 def receive_chats(conn, nickname, all_nicks, all_socks):
-    while True:
-        chat_message = library.read_message(conn)
-        if chat_message:
-            j=0
-            for i in all_nicks:
-                if i != nickname:
-                    library.send_message(all_socks[j], nickname, chat_message) 
-                    j+=1
-                else:     
-                    j+=1
+        try:
+            chat_message = library.read_message(conn)
+            if chat_message:
+                print(chat_message['nickname'] + ": " + chat_message['nickname'])
+
+            if chat_message['message'] == "BYE":
+                conn.close()
+                # child process stuff?
+            else:
+                #print(f"Received from {chat_message[nickname]}: {chat_message[message]}")
+                j = 0
+                for nick in all_nicks:
+                    if nick != nickname and all_socks[j].fileno() != 0:
+                        library.send_message(all_socks[j], nickname, chat_message) 
+                        j += 1
+                    else:
+                        j += 1
+        except (ConnectionResetError, json.JSONDecodeError) as e:
+            print(f"Error receiving message: {e}")
+#            break
+
 def main():
     all_nicks = []
     all_socks = []
@@ -61,28 +72,39 @@ def main():
             while True:
                 conn, _ = s.accept()
                 with conn:
-                    #Send hello to connecting client
+                    # Send hello to connecting client
                     conn.sendall(len("HELLO").to_bytes(2, 'big') + "HELLO".encode()) 
-
-                    unique = 0                
+                    unique = 0
                     conn.sendall(len("NICK").to_bytes(2, 'big') + "NICK".encode())
-                    while True:                        
+
+                    while unique == 0:
                         word_length = int.from_bytes(really_read(conn, 2), 'big')
                         nickname = really_read(conn, word_length).decode()
-                        for i in all_nicks:
-                            if i != nickname: 
-                                unique += 1                                     
-                        if unique == len(all_nicks):
+
+                        if nickname in all_nicks:
+                            conn.sendall(len("RETRY").to_bytes(2, 'big') + "RETRY".encode())
+
+                        else:
                             conn.sendall(len("READY").to_bytes(2, 'big') + "READY".encode())
-                            break 
-                        conn.sendall(len("RETRY").to_bytes(2, 'big') + "RETRY".encode())
+                            all_socks.append(conn)
+                            all_nicks.append(nickname)
+                            unique = 1
+
                     unique = 0
-                    all_socks.append(conn)
-                    all_nicks.append(nickname)
-               
-                    check = os.fork() 
-                    if check == 0: 
+                    '''
+                          for i in all_nicks:
+                            if i != nickname:
+                                unique += 1
+                            if unique == len(all_nicks):
+                                conn.sendall(len("READY").to_bytes(2, 'big') + "READY".encode())
+                                break 
+                            conn.sendall(len("RETRY").to_bytes(2, 'big') + "RETRY".encode())
+                    '''
+
+                    check = os.fork()
+                    if check == 0:
                         receive_chats(conn, nickname, all_nicks, all_socks)
+
                         #os.wait()
                         #all_nicks.remove(nickname)
                         #all_socks.remove(conn)
