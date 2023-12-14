@@ -37,7 +37,7 @@ all_socks = []
 # Remove log file if it exists
 try:
     os.remove("log.txt")
-except Exception as e:
+except OSError as e:
     pass
 
 # Description: Receives chats from a client and sends it to the other clients
@@ -61,13 +61,13 @@ def receive_chats(conn, nickname, all_nicks, all_socks):
                 break
                 # child process stuff?
             else:
-                with open('log.txt', 'a') as f:
-                    print(str(chat_message) + "\n", file=f)
-
-                with open('log.txt', 'r') as f:
+                with open('log.txt', 'r+') as f:
                     messages = f.read().encode()
                     length = len(messages).to_bytes(2, 'big')
                 conn.sendall(length + messages)
+
+                with open('log.txt', 'a') as f:
+                    print(str(chat_message) + "\n", file=f)
 
                 '''
                 for sock in all_socks:
