@@ -25,7 +25,7 @@ Library Functions: library.py
 | **Group Member** | Server | Client | Library | README |
 |------------------|--------|--------|---------|--------|
 | Zachary          | R       |        |   C       |   P (Application Protocol)     |
-| Lauren           |     C    |     C    |     R    |   P (Application Protocol)     |
+| Lauren           |     C (major contribution)    |     C    |     R    |   P (Application Protocol)     |
 | Kate             |        |    R    |         |    R    |
 
 > R - Primary responsible
@@ -89,11 +89,11 @@ more here
 3.  **Receiving Messages**
     
     -   Functionality to receive messages from the connected socket.
-    -   Time Taken: /still in progress as of 12/14 8:30AM/
+    -   Time Taken: 40 minutes, but is not functional as the server  can accomodate only one user at a time as of 12/14
 4.  **Reading Incoming Messages Process**
     
     -   Child process to read incoming messages.
-    -   Time Taken:  /still in progress as of 12/14 8:30AM/
+    -   Time Taken:  -
 5.  **Sending Messages Process**
     
     -   Parent process to send messages through the socket.
@@ -119,7 +119,8 @@ more here
 
 # ASSUMPTIONS 
 * Clients will be able to connect and send messages to server
-* Second client cannot choose nickname before first client chooses their nickname
+* Second client cannot choose nickname or send messages until first client disconnects
+* Client 
 
 # Discussion on your development process
  including any decisions and/or major problems you encountered and your solution for each
